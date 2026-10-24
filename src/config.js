@@ -314,6 +314,7 @@ export const config = {
   dog: {
     name: 'Bobby',         // Hundens navn
     secondName: 'Molly',   // Navnet på hund nummer 2
+    puppyName: 'Bamse',    // Navnet på hvalpen (hund nummer 3)
     speed: 9,              // Hvor hurtigt hundene løber
     price: 100,
     // Hvor mange ænder hunden kan bære. Første køb giver hunden, resten er opgraderinger.
@@ -370,6 +371,9 @@ export const config = {
     swing: 40,
     hammock: 50,
     lights: 60,
+    owl: 300,
+    falcon: 400,
+    puppy: 300,
   },
 
   // --- Pynt ---

@@ -57,6 +57,7 @@ import { createDecor } from './decor.js';
 import { createCold } from './cold.js';
 import { createRides } from './rides.js';
 import { createBoats } from './boats.js';
+import { createPets } from './pets.js';
 import { createStats } from './stats.js';
 
 const game = createGame(config);
@@ -147,6 +148,7 @@ game.add('car', createCar(game));
 game.add('sea', createSea(game));
 game.add('rides', createRides(game));
 game.add('boats', createBoats(game));
+game.add('pets', createPets(game));
 game.add('wardrobe', createWardrobe(game));
 game.add('score', createScore(game));
 game.add('photo', createPhoto(game));

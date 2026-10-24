@@ -47,7 +47,7 @@ export function createShop(game) {
   // --- Butiksvinduet ---
   const CATEGORIES = [
     { id: 'udstyr', name: '🔫 Udstyr' },
-    { id: 'hund', name: '🐕 Hunde' },
+    { id: 'hund', name: '🐾 Dyr' },
     { id: 'mad', name: '🔥 Mad' },
     { id: 'lejr', name: '🏠 Lejren' },
     { id: 'skov', name: '🚗 Bil & skov' },

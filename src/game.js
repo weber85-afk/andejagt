@@ -28,6 +28,11 @@ export function createGame(config) {
     // Ting der ligger på jorden og kan samles op: { grounded(), take(item) }
     pickups: [],
 
+    // Ram et bestemt dyr (fx når falken fanger det)
+    hitTarget(target, gun) {
+      game.targets.find((p) => p.owns?.(target))?.hit(target, gun);
+    },
+
     addToBag(type, n = 1) {
       game.state.bag[type] = (game.state.bag[type] || 0) + n;
     },

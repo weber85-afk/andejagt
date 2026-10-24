@@ -259,6 +259,7 @@ export function createWildlife(game) {
       return hits;
     },
     hit: (a, gun) => hit(a, gun),
+    owns: (a) => animals.includes(a),
   });
 
   game.pickups.push({

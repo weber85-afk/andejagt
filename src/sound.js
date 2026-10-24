@@ -279,6 +279,15 @@ export function createSound() {
       tone({ type: 'sawtooth', from: 700, to: 250, seconds: 0.8, volume: 0.2, filter: 900, delay: 0.6 });
     }),
 
+    hoot: play(() => {
+      tone({ from: 420, to: 380, seconds: 0.35, volume: 0.25 });
+      tone({ from: 400, to: 360, seconds: 0.5, volume: 0.25, delay: 0.5 });
+    }),
+
+    screech: play(() => {
+      tone({ type: 'sawtooth', from: 2200, to: 1400, seconds: 0.5, volume: 0.15, filter: 2000 });
+    }),
+
     puff: play(() => {
       noise({ seconds: 0.6, volume: 0.5, type: 'lowpass', freq: 500 });
       tone({ type: 'sawtooth', from: 200, to: 80, seconds: 0.5, volume: 0.15 });

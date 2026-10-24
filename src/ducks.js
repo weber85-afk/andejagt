@@ -189,6 +189,7 @@ export function createDucks(game) {
       return hits;
     },
     hit: (duck) => hitDuck(duck),
+    owns: (d) => ducks.includes(d),
   });
   game.pickups.push({
     grounded: () => ducks.filter((d) => d.state === 'ground'),

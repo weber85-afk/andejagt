@@ -369,6 +369,8 @@ export function createDogs(game) {
   return {
     list: dogs,
     get owned() { return dogs.length > 0; },
+    // Tilføj en hund (bruges når hvalpen bliver stor)
+    addDog: (name, colors) => addDog(name, colors),
 
     update(dt) {
       if (dogs.length && game.input.wasPressed('KeyG')) {
