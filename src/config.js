@@ -299,6 +299,17 @@ export const config = {
     trailerPrice: 150,     // Trailer, så hundene kan komme med til Storskoven
   },
 
+  // --- Ting at ride og køre på (kaldes frem med J) ---
+  rides: {
+    horse: { name: 'Hest', emoji: '🐴', price: 600, minLevel: 3, speed: 12, text: 'Rid rundt overalt, også hvor bilen ikke kan komme' },
+    atv: { name: 'ATV', emoji: '🏍️', price: 500, minLevel: 2, speed: 15, text: 'Hurtig firhjuler, der kan køre i skoven' },
+    snowmobile: { name: 'Snescooter', emoji: '🛷', price: 500, minLevel: 4, speed: 18, slowSpeed: 5, text: 'Suser af sted på sne (om vinteren og på Fjeldet)' },
+  },
+  boats: {
+    canoe: { name: 'Kano', emoji: '🛶', price: 150, speed: 5, text: 'Sejl på åen i Storskoven' },
+    speedboat: { name: 'Speedbåd', emoji: '🚤', price: 700, minLevel: 4, speed: 18, text: 'Hurtig båd ved molen ved Havet' },
+  },
+
   // --- Hundene ---
   dog: {
     name: 'Bobby',         // Hundens navn

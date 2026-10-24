@@ -203,8 +203,9 @@ export function createPlayer(game) {
         vehicle.drive(dt);   // bilen flytter figuren og drejer kameraet med
       } else if (moving && vehicle) {
         move.normalize().multiplyScalar(vehicle.speed * dt);
+        const old = position.clone();
         position.add(move);
-        vehicle.constrain(position);
+        vehicle.constrain(position, old);
       } else if (moving) {
         let speed = input.isDown('ShiftLeft') || input.isDown('ShiftRight') ? cfg.runSpeed : cfg.walkSpeed;
         if (game.isInLake(position.x, position.z)) speed *= cfg.waterSlowdown;
@@ -242,8 +243,9 @@ export function createPlayer(game) {
 
       // Animer figuren
       const swing = moving && onGround && !vehicle ? Math.sin(walkPhase) * 0.7 : 0;
-      legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, swing, 0.3);
-      legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, -swing, 0.3);
+      const sitting = vehicle?.showRider ? -1.3 : null;   // benene frem, når man rider
+      legL.rotation.x = THREE.MathUtils.lerp(legL.rotation.x, sitting ?? swing, 0.3);
+      legR.rotation.x = THREE.MathUtils.lerp(legR.rotation.x, sitting ?? -swing, 0.3);
       figure.position.copy(position);
       figure.rotation.y = yaw;
       aim.rotation.x = pitch;
@@ -252,12 +254,13 @@ export function createPlayer(game) {
       // Kamera
       camera.rotation.set(pitch, yaw, 0, 'YXZ');
       const eyeY = position.y + cfg.eyeHeight;
-      if (mode === 'first' || driving) figure.visible = false;
+      const hideRider = driving && !vehicle.showRider;
+      if (mode === 'first' || hideRider) figure.visible = false;
       if (mode === 'first') {
         const bob = moving && onGround && !vehicle ? Math.abs(Math.sin(walkPhase)) * 0.05 : 0;
         camera.position.set(position.x, eyeY + bob, position.z);
       } else {
-        figure.visible = !driving;
+        figure.visible = !hideRider;
         lookDir.set(-Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), -Math.cos(yaw) * Math.cos(pitch));
         camStart.set(position.x, eyeY + 0.4, position.z);
         camEnd.copy(camStart)
