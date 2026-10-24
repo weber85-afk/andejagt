@@ -147,11 +147,57 @@ export function createShelter(game) {
     hut.add(roof);
   }
 
+  // Pejs: varmer godt om vinteren
+  let fireplaceFlame = null;
+  function addFireplace() {
+    hut.add(
+      box(1.1, 1.2, 0.5, 0x8a8a86, 0, 0.6, -1.65, 'stone'),
+      box(0.6, 0.5, 0.1, 0x222222, 0, 0.4, -1.39),
+      box(0.4, 2.4, 0.4, 0x8a8a86, 0, 2.1, -1.75, 'stone'),
+    );
+    fireplaceFlame = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.3, 0.1), glow(0xff7a20, 2.5));
+    fireplaceFlame.position.set(0, 0.35, -1.36);
+    const light = new THREE.PointLight(0xff8a3a, 2, 6, 1.5);
+    light.position.set(0, 0.6, -1.1);
+    hut.add(fireplaceFlame, light);
+  }
+
+  // Akvarium med de fisk man har fanget
+  let aquarium = null;
+  function addAquarium() {
+    aquarium = new THREE.Group();
+    aquarium.position.set(1.25, 0, 1.2);
+    aquarium.add(box(1, 0.6, 0.55, 0x6b4423, 0, 0.3, 0, 'planks'));
+    const glass = new THREE.Mesh(new THREE.BoxGeometry(0.95, 0.55, 0.5), new THREE.MeshPhongMaterial({ color: 0x5ab8e8, transparent: true, opacity: 0.45, shininess: 100 }));
+    glass.position.y = 0.88;
+    aquarium.add(glass, box(0.9, 0.05, 0.45, 0xe6d49a, 0, 0.63, 0));
+    aquarium.userData.fish = [];
+    hut.add(aquarium);
+    fillAquarium();
+  }
+  function fillAquarium() {
+    if (!aquarium) return;
+    for (const f of aquarium.userData.fish) aquarium.remove(f);
+    const count = Math.min(6, game.saveables.stats?.save().s.fish ?? 0);
+    const colors = [0xf28a2b, 0x9fb8c8, 0xf2c22b, 0xd8323c, 0x5ad85a, 0x8a5ae8];
+    aquarium.userData.fish = [];
+    for (let i = 0; i < Math.max(1, count); i++) {
+      const fish = new THREE.Group();
+      fish.add(box(0.14, 0.08, 0.04, colors[i]), box(0.05, 0.08, 0.02, colors[i], -0.09, 0, 0));
+      fish.userData.offset = i * 1.3;
+      aquarium.add(fish);
+      aquarium.userData.fish.push(fish);
+    }
+  }
+  game.on('fishCaught', fillAquarium);
+
   const needsShelter = () => (built ? null : 'Kræver shelteret');
   for (const [id, emoji, name, text, add] of [
     ['shelterLamp', '🏮', 'Lampe på shelteret', 'Lyser ved døren, så du kan finde hjem om natten', addLamp],
     ['chest', '🧰', 'Kiste', 'Din stegte mad bliver ikke dårlig om natten', addChest],
     ['biggerShelter', '🏡', 'Større shelter', 'Et værelse mere, og du vågner udhvilet og løber hurtigere', addRoom],
+    ['fireplace', '🔥', 'Pejs i hytten', 'Hytten bliver rigtig varm om vinteren', addFireplace],
+    ['aquarium', '🐠', 'Akvarium', 'De fisk du fanger, svømmer rundt i hytten', addAquarium],
   ]) {
     game.shop.addItem({
       id,
@@ -209,6 +255,12 @@ export function createShelter(game) {
 
     update() {
       if (lampLight) lampLight.intensity = 4 * (1 - game.dayNight.light);
+      if (fireplaceFlame) fireplaceFlame.scale.y = 0.8 + Math.random() * 0.4;
+      aquarium?.userData.fish.forEach((f) => {
+        const t = game.time * 0.6 + f.userData.offset;
+        f.position.set(Math.sin(t) * 0.35, 0.75 + Math.sin(t * 1.7) * 0.15, Math.cos(t * 0.8) * 0.15);
+        f.rotation.y = Math.cos(t) > 0 ? 0 : Math.PI;
+      });
       if (!built || sleeping || !game.isPlayerNear(bedPos, 1.8)) return;
       if (game.dayNight.isNight) {
         hud.setPrompt('Tryk <b>E</b> for at sove til i morgen 😴');

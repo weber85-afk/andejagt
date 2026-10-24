@@ -192,6 +192,12 @@ export const config = {
     { id: 'goose', name: 'Gåsesteg med bær', emoji: '🍗', needs: { goose: 1, berry: 3 }, points: 120, portions: 3 },
     { id: 'venison', name: 'Hjortesteg', emoji: '🥩', needs: { deer: 1, mushroom: 2, berry: 2 }, points: 200, portions: 3 },
     { id: 'feast', name: 'Bjørnefest', emoji: '🍖', needs: { bear: 1, mushroom: 3, berry: 3 }, points: 350, portions: 5 },
+    { id: 'pancakes', name: 'Pandekager med bær', emoji: '🥞', needs: { egg: 2, berry: 2 }, points: 60, portions: 2 },
+    { id: 'omelet', name: 'Æggekage med svampe', emoji: '🍳', needs: { egg: 3, mushroom: 2 }, points: 80, portions: 2 },
+    { id: 'veggie', name: 'Grøntsagssuppe', emoji: '🥣', needs: { carrot: 2, potato: 2 }, points: 70, portions: 3 },
+    { id: 'mash', name: 'And med kartoffelmos', emoji: '🍛', needs: { duck: 1, potato: 2 }, points: 90, portions: 2 },
+    { id: 'honeyduck', name: 'Honningglaseret and', emoji: '🍯', needs: { duck: 1, honey: 1 }, points: 100, portions: 2 },
+    { id: 'carrotcake', name: 'Gulerodskage', emoji: '🍰', needs: { carrot: 2, egg: 2, honey: 1 }, points: 120, portions: 3 },
   ],
 
   // --- Røgeriet ---
@@ -347,6 +353,12 @@ export const config = {
     nightVision: 200,
     bait: 15,
     rodUpgrade: 60,
+    aquarium: 150,
+    fireplace: 200,
+    warmJacket: 120,
+    swing: 40,
+    hammock: 50,
+    lights: 60,
   },
 
   // --- Pynt ---
@@ -385,6 +397,10 @@ export const config = {
     // Ingredienser til gryden (kan ikke steges alene)
     mushroom: { name: 'svamp', plural: 'svampe', emoji: '🍄', ingredient: true },
     berry: { name: 'bær', plural: 'bær', emoji: '🫐', ingredient: true },
+    egg: { name: 'æg', plural: 'æg', emoji: '🥚', ingredient: true },
+    carrot: { name: 'gulerod', plural: 'gulerødder', emoji: '🥕', ingredient: true },
+    potato: { name: 'kartoffel', plural: 'kartofler', emoji: '🥔', ingredient: true },
+    honey: { name: 'honning', plural: 'honning', emoji: '🍯', ingredient: true },
   },
 
   // Dyr der ikke er mad
@@ -415,6 +431,35 @@ export const config = {
   traps: {
     chance: 0.6,           // Chancen for at en fælde har fanget noget om morgenen
     max: 5,
+  },
+
+  // --- Gården i lejren ---
+  farm: {
+    coop: { x: -22, z: -2 },       // Hønsehus
+    garden: { x: -5, z: 28 },      // Køkkenhave
+    hive: { x: 32, z: 6 },         // Bistade
+    pond: { x: -30, z: 32 },       // Andedam
+    swing: { x: 19, z: 28 },
+    hammock: { x: 33, z: 15 },
+    coopPrice: 150,
+    gardenPrice: 120,
+    hivePrice: 100,
+    pondPrice: 250,
+    eggsPerDay: 3,
+    pondExtraDucks: 2,
+  },
+
+  // --- Kulde (om vinteren og på Fjeldet) ---
+  cold: {
+    winterDrain: 0.4,      // Så meget varme man mister i sekundet om vinteren (fra 100)
+    mountainDrain: 0.25,   // ... og på Fjeldet resten af året
+    nightFactor: 1.5,      // Om natten er det koldere
+    jacketFactor: 0.35,    // Med varm jakke mister man kun så meget
+    fireWarmth: 4,         // Så hurtigt man bliver varm ved bålet
+    hutWarmth: 1.5,        // ... i hytten
+    fireplaceWarmth: 5,    // ... i hytten med pejs
+    carWarmth: 2,
+    coldBelow: 25,
   },
 
   // --- Marked og sparegris ---

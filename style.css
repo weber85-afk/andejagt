@@ -121,7 +121,17 @@ html, body {
   font-size: 18px;
   font-weight: bold;
 }
-#hunger .gauge, #fuel .gauge {
+#warmth {
+  position: absolute;
+  bottom: 96px;
+  left: 18px;
+  font-size: 18px;
+  font-weight: bold;
+}
+#warmth:empty { display: none; }
+#warmth .gauge div { height: 100%; }
+
+#hunger .gauge, #fuel .gauge, #warmth .gauge {
   width: 180px;
   height: 14px;
   margin-top: 4px;
@@ -154,7 +164,7 @@ html, body {
 
 #fuel {
   position: absolute;
-  bottom: 96px;
+  bottom: 152px;
   left: 18px;
   font-size: 20px;
   font-weight: bold;

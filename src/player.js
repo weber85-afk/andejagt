@@ -209,7 +209,7 @@ export function createPlayer(game) {
         let speed = input.isDown('ShiftLeft') || input.isDown('ShiftRight') ? cfg.runSpeed : cfg.walkSpeed;
         if (game.isInLake(position.x, position.z)) speed *= cfg.waterSlowdown;
         if (game.time < boostUntil) speed *= boostFactor;
-        speed *= game.hunger?.speedFactor ?? 1;
+        speed *= (game.hunger?.speedFactor ?? 1) * (game.cold?.speedFactor ?? 1);
         move.normalize().multiplyScalar(speed * dt);
         const oldX = position.x;
         const oldZ = position.z;

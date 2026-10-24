@@ -53,7 +53,7 @@ export function createGear(game) {
 
   function placeDecoys() {
     if (decoys.length) return;
-    ducks.mods.extraFlying = config.decoys.extraDucks;
+    ducks.mods.extraFlying += config.decoys.extraDucks;
     ducks.mods.lakeChance = 0.75;
     for (let i = 0; i < 4; i++) {
       const { mesh } = makeDuckModel();

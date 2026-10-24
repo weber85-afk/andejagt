@@ -57,6 +57,12 @@ export function createAreas(game) {
       { ...config.flag.position, r: 2 },
       { ...config.hide.position, r: 3 },
       { ...w.parking, r: 6 },
+      { ...config.farm.coop, r: 5 },
+      { ...config.farm.garden, r: 5 },
+      { ...config.farm.hive, r: 3 },
+      { ...config.farm.pond, r: 6 },
+      { ...config.farm.swing, r: 3 },
+      { ...config.farm.hammock, r: 3 },
     ],
   };
 

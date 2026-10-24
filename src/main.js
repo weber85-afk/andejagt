@@ -52,6 +52,9 @@ import { createEconomy } from './economy.js';
 import { createTreasure } from './treasure.js';
 import { createTraps } from './traps.js';
 import { createNightVision } from './nightvision.js';
+import { createFarm } from './farm.js';
+import { createDecor } from './decor.js';
+import { createCold } from './cold.js';
 import { createStats } from './stats.js';
 
 const game = createGame(config);
@@ -130,9 +133,12 @@ game.add('campfire', createCampfire(game));
 game.add('smokehouse', createSmokehouse(game));
 game.add('fox', createFox(game));
 game.add('pot', createPot(game));
+game.add('farm', createFarm(game));
+game.add('decor', createDecor(game));
 game.add('forage', createForage(game));
 game.add('shelter', createShelter(game));
 game.add('trophies', createTrophies(game));   // efter shelteret, da trofæerne hænger i det
+game.add('cold', createCold(game));
 game.add('dogs', createDogs(game));
 game.add('camp', createCamp(game));
 game.add('car', createCar(game));
