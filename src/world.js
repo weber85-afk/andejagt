@@ -70,8 +70,14 @@ export function createWorld(game) {
   const sunDirection = new THREE.Vector3(0.6, 1, 0.4).normalize();
 
   // --- Ét område ---
+  // Hvert område har sin egen gruppe, så kun det område man er i bliver tegnet
+  const areaGroups = {};
+
   function buildArea(area, options) {
     const random = seededRandom(area.id === 'home' ? 42 : 99);
+    const group = new THREE.Group();
+    areaGroups[area.id] = group;
+    scene.add(group);
     const c = area.center;
     const half = area.size / 2;
     const batch = createBatch();
@@ -113,7 +119,7 @@ export function createWorld(game) {
     const ground = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ vertexColors: true, map: groundTexture }));
     ground.position.set(c.x, 0, c.z);
     ground.receiveShadow = true;
-    scene.add(ground);
+    group.add(ground);
     grounds.push(ground);
 
     // Vand
@@ -139,7 +145,7 @@ export function createWorld(game) {
       mesh.position.y = game.waterLevel;
       mesh.receiveShadow = true;
       mesh.userData.base = wg.attributes.position.array.slice();
-      scene.add(mesh);
+      group.add(mesh);
       water.push(mesh);
     }
 
@@ -149,7 +155,7 @@ export function createWorld(game) {
       new THREE.MeshLambertMaterial({ color: 0xb59a6a, map: texture('stone'), polygonOffset: true, polygonOffsetFactor: -2 }),
     );
     road.receiveShadow = true;
-    scene.add(road);
+    group.add(road);
 
     function isFree(x, z, spacing = 3) {
       if (game.waterDistance(x, z) < 3) return false;
@@ -235,7 +241,7 @@ export function createWorld(game) {
       batch.add(g);
     }
 
-    batch.build(scene);
+    batch.build(group);
     game.colliders.push(...colliders);
 
     // Græstotter og blomster (mange små figurer tegnet på én gang)
@@ -269,7 +275,7 @@ export function createWorld(game) {
       mesh.count = n;
       mesh.receiveShadow = true;
       mesh.userData.kind = kind;
-      scene.add(mesh);
+      group.add(mesh);
       decorations.push(mesh);
     }
   }
@@ -436,6 +442,7 @@ export function createWorld(game) {
       }
       const area = game.area;
       clouds.position.set(area.center.x, 0, area.center.z);
+      for (const [id, group] of Object.entries(areaGroups)) group.visible = id === area.id;
 
       // Solens skygger følger efter spilleren
       const p = game.player?.position;
