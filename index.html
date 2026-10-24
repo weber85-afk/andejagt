@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Andejagt</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="game"></div>
+
+  <!-- HUD: det man ser oven på spillet -->
+  <div id="hud">
+    <div id="crosshair"></div>
+    <div id="compass"></div>
+    <canvas id="map" width="440" height="440"></canvas>
+    <div id="mission"></div>
+    <div id="tip"></div>
+    <div id="hunger"></div>
+    <div id="binoculars"></div>
+    <div id="stats"></div>
+    <div id="prompt"></div>
+    <div id="fade"></div>
+    <div id="messages"></div>
+    <div id="scope"></div>
+    <div id="ammo"></div>
+    <div id="fuel"></div>
+    <div id="camera-hint">V = skift kamera · Esc = menu</div>
+  </div>
+
+  <div id="photo-hint">📷 Fotomode · klik for at gemme et billede · P for at stoppe</div>
+
+  <!-- Butikken -->
+  <div id="shop" class="screen hidden">
+    <div class="panel shop-panel">
+      <h1>🛒 Butik</h1>
+      <p class="sub">Du har <b id="shop-points">0</b> ⭐ at købe for</p>
+      <div id="shop-sell"></div>
+      <div id="shop-tabs"></div>
+      <div id="shop-items"></div>
+      <button id="shop-close" class="small">Luk butikken (E)</button>
+    </div>
+  </div>
+
+  <!-- Gryden -->
+  <div id="recipes" class="screen hidden">
+    <div class="panel shop-panel">
+      <h1>🍲 Gryden</h1>
+      <p class="sub">Vælg en ret. Ingredienserne tages fra din taske.</p>
+      <div id="recipe-items"></div>
+      <button id="recipes-close" class="small">Luk (E)</button>
+    </div>
+  </div>
+
+  <!-- Startskærm / pausemenu -->
+  <div id="overlay" class="screen">
+    <div class="panel">
+      <h1 id="overlay-title">🦆 Andejagt 🔥</h1>
+      <p class="sub" id="overlay-sub">Jag ænder og vildt, steg det over bålet, og kør til Storskoven!</p>
+      <div class="controls">
+        <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></span><span>Gå rundt</span>
+        <span><kbd>Mus</kbd></span><span>Kig rundt</span>
+        <span><kbd>Klik</kbd></span><span>Skyd</span>
+        <span><kbd>Shift</kbd></span><span>Løb</span>
+        <span><kbd>Mellemrum</kbd></span><span>Hop</span>
+        <span><kbd>E</kbd></span><span>Brug (bål, butik, bil, seng ...)</span>
+        <span><kbd>R</kbd></span><span>Lad om</span>
+        <span><kbd>1</kbd>–<kbd>4</kbd></span><span>Skift våben / fiskestang</span>
+        <span><kbd>Højreklik</kbd><kbd>Z</kbd></span><span>Kikkertsigte til/fra</span>
+        <span><kbd>Q</kbd> <kbd>L</kbd> <kbd>B</kbd></span><span>Fløjte · Lygte · Kikkert</span>
+        <span><kbd>V</kbd></span><span>Skift kamera</span>
+        <span><kbd>M</kbd></span><span>Kort</span>
+        <span><kbd>F</kbd></span><span>Spis</span>
+        <span><kbd>G</kbd></span><span>Hunde: bliv / kom</span>
+        <span><kbd>P</kbd></span><span>Fotomode</span>
+        <span><kbd>H</kbd> <kbd>R</kbd></span><span>I bilen: horn · radio</span>
+        <span><kbd>Esc</kbd></span><span>Menu</span>
+      </div>
+      <div id="overlay-buttons"></div>
+      <p id="overlay-status"></p>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

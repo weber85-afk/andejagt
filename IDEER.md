@@ -1,0 +1,100 @@
+# 💡 Idéer til Andejagt
+
+Skriv nye idéer her! Når en idé er lavet, flyttes den ned under **Færdigt**.
+
+## Idéer vi kan lave
+
+- [ ] Nye våben: bue og pil, slangebøsse
+- [ ] Ugler om natten
+- [ ] Ænderne sover på søen om natten
+- [ ] Spil med controller (Xbox/PlayStation)
+- [ ] Spille to sammen på samme tid (delt skærm)
+
+## Færdigt ✅
+
+- [x] Gå rundt med WASD, hoppe og løbe
+- [x] Se gennem figurens øjne, eller bag figuren (**V**)
+- [x] Ænder der flyver rundt og rapper
+- [x] Skyde ænderne, så de falder ned
+- [x] Samle ænderne op ved at gå hen til dem
+- [x] Steg ænderne over bålet. De bliver brændt, hvis man venter for længe!
+- [x] Point
+- [x] Butik hvor man bruger sine point
+- [x] Opgradere bålet, så man kan stege flere ænder ad gangen
+- [x] Dag og nat
+- [x] Shelter man kan købe og sove i om natten
+- [x] Hunden Bobby, der henter ænder og lægger dem ved bålet, og som kan bære flere ænder, når den bliver opgraderet
+- [x] Spillet gemmer sig selv, så man kan fortsætte næste gang
+- [x] Fuld skærm, musen bliver i spillet, og Esc åbner en menu
+- [x] Butikken har faner, og opgraderinger bliver dyrere for hvert niveau
+- [x] Sælge stegte ænder i butikken
+- [x] Udstyr:
+  - Patroner og omladning (**R**)
+  - Bedre gevær
+  - Haglgevær (**1**/**2**)
+  - Kikkertsigte (højreklik eller **Z** for til/fra)
+  - Andefløjte (**Q**)
+  - Lokkeænder
+  - Lommelygte (**L**)
+- [x] Hunde:
+  - Hurtigere hunde
+  - Hundekurv
+  - Hundekiks
+  - Hunden Molly
+  - Tørklæde og solbriller
+- [x] Mad:
+  - Hurtigere stegning
+  - Alarm
+  - Krydderier
+  - Røgeri
+  - Tag over bålet
+  - Regnvejr
+- [x] Lejren:
+  - Lampe
+  - Kiste (stegte ænder bliver ellers dårlige om natten)
+  - Større shelter (man vågner udhvilet)
+  - Jagtskjul
+  - Båd
+  - Flagstang
+- [x] Pynt: hatte (cowboy, viking, krone) og vestefarver
+- [x] Flottere grafik:
+  - Pixel-mønstre
+  - Bakker
+  - Eg, birk og gran
+  - Græs og blomster
+  - Himmel med sol
+  - Bølgende vand og glød
+  - Ildfluer og sommerfugle
+- [x] Bil med benzin og trailer, og en grusvej til **Storskoven**
+- [x] Fasaner, harer og gæs i Storskoven, og den gyldne and i lejren
+- [x] Bjørne og riflen (**3**)
+- [x] Fiskestang (**4**)
+- [x] Trofævæg i shelteret
+- [x] Jagttårn
+- [x] Kort (**M**) og kompas
+- [x] Skovfogeden med opgaver
+- [x] Lyd og stemning:
+  - Fuglesang og fårekyllinger
+  - En å der risler og havet der bruser
+  - Vind og fodtrin
+  - Musik i menuen
+  - Lydstyrke og grafik i indstillinger
+- [x] Kameraet bag figuren går ikke gennem ting
+- [x] Tips til nye spillere
+- [x] Butikken viser det, man mangler, øverst
+- [x] Fotomode (**P**)
+- [x] Sult og spis (**F**)
+- [x] Klap hundene (**E**) og få dem til at blive eller komme (**G**)
+- [x] Medaljer og statistik
+- [x] Andetræk
+- [x] Hjort (kræver riflen), vildsvin der angriber, og ræv der stjæler fra bunken
+- [x] Spor på jorden og kikkert (**B**)
+- [x] Gryde med opskrifter, bær og svampe
+- [x] Bilhorn (**H**), bilradio (**R**), billak og firehjulstræk
+- [x] **Fjeldet** med sne, stenbukke og ørne
+- [x] **Havet** med strand, mole, fiskekutter, måger og kæmpefisk
+- [x] Årstider:
+  - Efterår
+  - Vinter med sne, frossen sø og isfiskeri
+  - Forår
+- [x] Flere spillere på samme computer
