@@ -151,15 +151,20 @@ export function createWildlife(game) {
     return new THREE.Vector3(area.center.x, 0, area.center.z);
   }
 
+  const GOLD = new THREE.MeshLambertMaterial({ color: 0xf2c22b, emissive: 0x6a4a00 });
+
   function spawn(type, area) {
     const model = makeModel(type);
+    // En sjælden gang er hjorten den gyldne hjort
+    const golden = type === 'deer' && Math.random() < 0.08;
+    if (golden) model.mesh.traverse((m) => { if (m.isMesh) m.material = GOLD; });
     const pos = randomGroundSpot(area, game.player?.position);
     if (type === 'eagle') pos.y += 25 + Math.random() * 10;
     if (type === 'gull') pos.set(area.center.x + (Math.random() - 0.5) * 80, 8 + Math.random() * 6, area.center.z + 15 + Math.random() * 30);
     model.mesh.position.copy(pos);
     scene.add(model.mesh);
     animals.push({
-      type, area, ...model,
+      type, area, ...model, golden,
       state: type === 'eagle' || type === 'gull' ? 'soar' : 'walk',
       health: type === 'boar' ? 2 : 1,
       heading: Math.random() * 6.3,
@@ -199,6 +204,11 @@ export function createWildlife(game) {
   }
 
   function kill(a) {
+    if (a.golden) {
+      state.trophies.goldenDeer = (state.trophies.goldenDeer || 0) + 1;
+      state.points += 250;
+      setTimeout(() => game.message('🌟 DEN GYLDNE HJORT! +250 ekstra ⭐'), 1200);
+    }
     a.state = 'falling';
     a.velocity.multiplyScalar(0.3);
     if (a.wingL) a.velocity.y = 1;
@@ -467,7 +477,7 @@ export function createWildlife(game) {
           if (distance < scare * stealth * (lured ? 0.4 : 1) && !hidden && a.state === 'walk') flee(a);
           if (a.state === 'flee') {
             a.timer -= dt;
-            spd = { hare: 9, deer: 10, ibex: 7 }[a.type];
+            spd = { hare: 9, deer: a.golden ? 13 : 10, ibex: 7 }[a.type];
             a.heading = awayFromPlayer + (a.type === 'hare' ? Math.sin(a.phase * 4) * 0.8 : 0);
             if (a.timer <= 0) a.state = 'walk';
           }

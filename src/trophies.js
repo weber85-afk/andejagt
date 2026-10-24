@@ -44,6 +44,18 @@ export function createTrophies(game) {
       display.add(label);
     }
 
+    // Gyldne gevirer, mønter og diamanter på brættet
+    for (let i = 0; i < Math.min(t.goldenDeer || 0, 2); i++) {
+      const antler = new THREE.Group();
+      for (const side of [-1, 1]) {
+        antler.add(box(0.05, 0.05, 0.4, 0xf2c22b, 0, side * 0.15, 0), box(0.05, 0.05, 0.2, 0xf2c22b, 0, side * 0.3, 0.12));
+      }
+      antler.position.set(1.78, 2.0, -0.6 + i * 0.5);
+      display.add(antler);
+    }
+    for (let i = 0; i < Math.min(t.goldCoins || 0, 8); i++) display.add(box(0.12, 0.03, 0.12, 0xf2c22b, 1.7, 1.2 + i * 0.03, 0.85));
+    for (let i = 0; i < Math.min(t.diamonds || 0, 4); i++) display.add(box(0.1, 0.1, 0.1, 0x6ad8ff, 1.7, 1.25, -0.9 + i * 0.15));
+
     // Bjørneskind på gulvet
     for (let i = 0; i < Math.min(t.bears || 0, 3); i++) {
       const rug = new THREE.Group();
@@ -56,6 +68,7 @@ export function createTrophies(game) {
         box(0.25, 0.04, 0.4, 0x5a3a22, 0.7, 0, -0.5),
       );
       rug.position.set(0.3 - i * 0.2, 0.12 + i * 0.01, 0.4 - i * 0.3);
+      if (i < (t.giantBears || 0)) rug.scale.setScalar(1.4);   // kæmpebjørnens skind er større
       rug.rotation.y = 0.3 + i * 0.6;
       display.add(rug);
     }
@@ -77,8 +90,9 @@ export function createTrophies(game) {
   });
 
   game.on('animalHit', ({ type, golden }) => {
-    if (type === 'bear' || golden) rebuild();
+    if (type === 'bear' || type === 'deer' || golden) setTimeout(rebuild, 1500);
   });
+  game.on('treasureFound', rebuild);
   game.on('fishCaught', rebuild);
 
   return {};

@@ -135,6 +135,9 @@ export const config = {
     chargeSpeed: 8.5,      // Du løber 11 med Shift, så du kan godt nå at slippe væk
     noticeDistance: 22,    // Så tæt på kan man komme, før bjørnen ser én
     attackDistance: 2.2,
+    giantChance: 0.12,     // Chancen for at det er kæmpebjørnen
+    giantHealth: 6,
+    giantBonus: 300,
   },
 
   // --- Udstyr ---

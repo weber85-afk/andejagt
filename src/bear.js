@@ -51,9 +51,12 @@ export function createBear(game) {
     }
     model.mesh.position.set(x, game.groundHeight(x, z), z);
     scene.add(model.mesh);
-    bear = { ...model, state: 'wander', health: cfg.health, heading: Math.random() * 6.3, phase: 0, roarTimer: 0 };
-    sound.roar(0.4);
-    game.message('🐻 Du hører en bjørn brumme i skoven...');
+    // En sjælden gang er det kæmpebjørnen: større, stærkere og et særligt trofæ
+    const giant = Math.random() < cfg.giantChance;
+    if (giant) model.mesh.scale.setScalar(1.6);
+    bear = { ...model, giant, state: 'wander', health: giant ? cfg.giantHealth : cfg.health, heading: Math.random() * 6.3, phase: 0, roarTimer: 0 };
+    sound.roar(giant ? 1 : 0.4);
+    game.message(giant ? '🐻 Jorden ryster... det er KÆMPEBJØRNEN!' : '🐻 Du hører en bjørn brumme i skoven...');
   }
 
   function remove() {
@@ -63,15 +66,20 @@ export function createBear(game) {
     timer = cfg.minTime + Math.random() * (cfg.maxTime - cfg.minTime);
   }
 
+  let lastWarning = -10;
   function charge() {
     if (bear.state === 'charge') return;
     bear.state = 'charge';
-    sound.roar(0.9);
-    game.message('🐻 Bjørnen har set dig! Løb!');
+    if (game.time - lastWarning > 5) {
+      lastWarning = game.time;
+      sound.roar(0.9);
+      game.message('🐻 Bjørnen har set dig! Løb!');
+    }
   }
 
   // Bjørnen fangede spilleren
   function knockDown() {
+    if (game.sleeping) return;   // allerede væltet
     bear.state = 'wander';
     game.sleeping = true;
     hud.fade(true);
@@ -98,7 +106,8 @@ export function createBear(game) {
       const p = toPoint.copy(bear.mesh.position);
       p.y += 1.3;
       const along = p.clone().sub(ray.origin).dot(ray.direction);
-      if (along > 0 && along < range && ray.distanceSqToPoint(p) < 1.6 * 1.6) return [{ target: bear, along }];
+      const r = bear.giant ? 2.5 : 1.6;
+      if (along > 0 && along < range && ray.distanceSqToPoint(p) < r * r) return [{ target: bear, along }];
       return [];
     },
     hit(target, gun) {
@@ -119,6 +128,11 @@ export function createBear(game) {
       bear.phase = 0;
       sound.roar(0.6);
       state.trophies.bears = (state.trophies.bears || 0) + 1;
+      if (bear.giant) {
+        state.trophies.giantBears = (state.trophies.giantBears || 0) + 1;
+        state.points += cfg.giantBonus;
+        setTimeout(() => game.message(`🏆 Du nedlagde KÆMPEBJØRNEN! +${cfg.giantBonus} ekstra ⭐`), 1500);
+      }
       game.message(`🐻 Du nedlagde bjørnen! +${config.foods.bear.shotPoints}`);
       game.emit('animalHit', { type: 'bear' });
     },
@@ -159,7 +173,7 @@ export function createBear(game) {
         bear.marker.position.set(p.x, p.y + 2.6 + Math.sin(game.time * 4) * 0.2, p.z);
         bear.marker.rotation.y += dt * 2;
         if (distance < 2.8 && !game.player.vehicle) {
-          game.addToBag('bear');
+          game.addToBag('bear', bear.giant ? 3 : 1);
           game.message('🍖 Du fik bjørnekød og et bjørneskind!');
           game.emit('pickedUp', { type: 'bear' });
           remove();
