@@ -93,7 +93,8 @@ game.render = () => {
 // Grafik: 'høj' (flot) eller 'lav' (hurtig)
 game.setQuality = (quality) => {
   fancy = quality !== 'lav';
-  const ratio = fancy ? Math.min(devicePixelRatio, 2) : 1;
+  // Lidt lavere opløsning end skærmen på flotte skærme: ser næsten ens ud, men kører meget hurtigere
+  const ratio = fancy ? Math.min(devicePixelRatio, 1.5) : 1;
   renderer.setPixelRatio(ratio);
   composer.setPixelRatio(ratio);
   renderer.setSize(innerWidth, innerHeight);
