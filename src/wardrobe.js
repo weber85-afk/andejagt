@@ -29,5 +29,21 @@ export function createWardrobe(game) {
     });
   }
 
+  // Kamuflagedragt: ligner en vest, men dyrene opdager én senere
+  shop.addItem({
+    id: 'vest-camo',
+    category: 'udstyr',
+    emoji: '🌿',
+    name: 'Kamuflagedragt',
+    cosmetic: true,
+    group: 'vest',
+    price: config.prices.camo,
+    text: 'Dyrene opdager dig senere. Tag den på og af i butikken',
+    onEquip(on) {
+      player.setVestColor(on ? 0x4a5a2a : null);
+      game.stealth = on;
+    },
+  });
+
   return {};
 }

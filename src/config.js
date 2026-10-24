@@ -98,6 +98,11 @@ export const config = {
     },
     scopeZoom: 3.5,        // Hvor meget kikkertsigtet forstørrer
     binocularZoom: 5,      // Hvor meget kikkerten (B) forstørrer
+    bow: {
+      cooldown: 0.8,
+      range: 60,
+      startArrows: 12,
+    },
   },
 
   // --- Sult ---
@@ -117,6 +122,7 @@ export const config = {
     maxWait: 9,            // (højst)
     biteTime: 1.3,         // Så lang tid har man til at klikke, når fisken bider
     maxWeight: 4,          // Den største fisk man kan fange (kg)
+    rodUpgrades: [1.3, 1.7, 2.2],   // "Bedre fiskestang": så meget større fisk
   },
 
   // --- Bjørnen ---
@@ -332,6 +338,15 @@ export const config = {
     iceDrill: 70,
     binoculars: 80,
     carColor: 40,
+    bow: 120,
+    arrows: 15,
+    metalDetector: 150,
+    deerCall: 80,
+    camo: 150,
+    trap: 30,
+    nightVision: 200,
+    bait: 15,
+    rodUpgrade: 60,
   },
 
   // --- Pynt ---
@@ -388,6 +403,18 @@ export const config = {
   points: {
     spiceBonus: 10,        // Ekstra point for stegt mad med krydderier
     burnt: 1,              // Point for noget der er brændt på
+  },
+
+  // --- Skattejagt ---
+  treasure: {
+    perArea: { home: 4, forest: 6, mountain: 5, sea: 5, moor: 4 },   // skatte pr. område hver dag
+    range: 45,             // Så langt væk metaldetektoren kan høre en skat
+  },
+
+  // --- Fælder ---
+  traps: {
+    chance: 0.6,           // Chancen for at en fælde har fanget noget om morgenen
+    max: 5,
   },
 
   // --- Marked og sparegris ---

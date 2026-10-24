@@ -270,6 +270,15 @@ export function createSound() {
       noise({ seconds: 0.6, volume: volume * 0.6, type: 'lowpass', freq: 600, attack: 0.02 });
     }),
 
+    beep: play((closeness = 0) => {
+      tone({ type: 'square', from: 600 + closeness * 900, seconds: 0.06, volume: 0.1 });
+    }),
+
+    call: play(() => {
+      tone({ type: 'sawtooth', from: 300, to: 700, seconds: 0.6, volume: 0.2, filter: 900 });
+      tone({ type: 'sawtooth', from: 700, to: 250, seconds: 0.8, volume: 0.2, filter: 900, delay: 0.6 });
+    }),
+
     puff: play(() => {
       noise({ seconds: 0.6, volume: 0.5, type: 'lowpass', freq: 500 });
       tone({ type: 'sawtooth', from: 200, to: 80, seconds: 0.5, volume: 0.15 });

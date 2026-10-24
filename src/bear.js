@@ -169,7 +169,8 @@ export function createBear(game) {
         return;
       }
 
-      if (bear.state === 'wander' && distance < cfg.noticeDistance && !safe) charge();
+      const notice = cfg.noticeDistance * (game.stealth ? 0.5 : 1);   // kamuflage hjælper
+      if (bear.state === 'wander' && distance < notice && !safe) charge();
       if (bear.state === 'charge' && (distance > cfg.noticeDistance * 1.8 || safe)) {
         bear.state = 'wander';
         game.message('🐻 Bjørnen gav op');

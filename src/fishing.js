@@ -33,6 +33,7 @@ export function createFishing(game) {
     if (id !== 'winter') while (holes.length) scene.remove(holes.pop());
   });
 
+  let usedBait = false;
   let phase = 'idle';   // 'idle', 'waiting' (venter på bid) eller 'bite' (nu skal man klikke!)
   let timer = 0;
   const raycaster = new THREE.Raycaster();
@@ -76,13 +77,20 @@ export function createFishing(game) {
     line.visible = true;
     phase = 'waiting';
     timer = cfg.minWait + Math.random() * (cfg.maxWait - cfg.minWait);
+    usedBait = (state.bait ?? 0) > 0;
+    if (usedBait) {
+      state.bait--;
+      timer *= 0.5;   // med agn bider fiskene hurtigere
+    }
     effects.splash(bobber.position);
     sound.splashSound();
   }
 
   function catchFish() {
     const max = game.area.id === 'sea' ? config.sea.maxFishWeight : cfg.maxWeight;   // havfisk bliver større
-    const weight = Math.round((0.4 + Math.random() ** 2 * max) * 10) / 10;
+    const level = shop.level('rodUpgrade');
+    const bonus = (level ? cfg.rodUpgrades[level - 1] : 1) * (usedBait ? 1.3 : 1);
+    const weight = Math.round((0.4 + Math.random() ** 2 * max * bonus) * 10) / 10;
     game.addToBag('fish');
     const record = weight > (state.trophies.biggestFish || 0);
     if (record) state.trophies.biggestFish = weight;
@@ -103,6 +111,32 @@ export function createFishing(game) {
     levels: [{ text: 'Fang fisk i søen og åen. Tryk 4 for fiskestangen' }],
     onBuy(level, { loading }) {
       if (!loading) game.message('🎣 Tryk 4 for fiskestangen');
+    },
+  });
+
+  shop.addItem({
+    id: 'rodUpgrade',
+    category: 'udstyr',
+    emoji: '🎣',
+    name: 'Bedre fiskestang',
+    basePrice: config.prices.rodUpgrade,
+    requires: () => (shop.has('fishingRod') ? null : 'Kræver fiskestangen'),
+    levels: cfg.rodUpgrades.map((f) => ({ text: `Fisk op til ${Math.round((f - 1) * 100)}% større` })),
+    onBuy() {},
+  });
+
+  shop.addItem({
+    id: 'bait',
+    category: 'udstyr',
+    emoji: '🪱',
+    name: 'Agn (10 stk.)',
+    consumable: true,
+    price: config.prices.bait,
+    requires: () => (shop.has('fishingRod') ? null : 'Kræver fiskestangen'),
+    text: 'Fiskene bider dobbelt så hurtigt og bliver større',
+    current: () => `Du har ${state.bait ?? 0} agn`,
+    onBuy() {
+      state.bait = (state.bait ?? 0) + 10;
     },
   });
 

@@ -34,6 +34,20 @@ export function createGear(game) {
     game.message('🎵 Ænderne kommer!');
   }
 
+  // --- Hjortekald (C): lokker hjorte og vildsvin hen til én ---
+  let callReady = 0;
+  shop.addItem({
+    id: 'deerCall',
+    category: 'udstyr',
+    emoji: '🎺',
+    name: 'Hjortekald',
+    basePrice: config.prices.deerCall,
+    levels: [{ text: 'Tryk C, så kommer hjorte (og vildsvin!) hen mod dig' }],
+    onBuy(level, { loading }) {
+      if (!loading) game.message('🎺 Tryk C for hjortekaldet');
+    },
+  });
+
   // --- Lokkeænder ---
   const decoys = [];
 
@@ -94,6 +108,16 @@ export function createGear(game) {
   return {
     update() {
       if (shop.has('whistle') && input.wasPressed('KeyQ')) blowWhistle();
+      if (shop.has('deerCall') && input.wasPressed('KeyC')) {
+        if (game.time < callReady) {
+          game.message(`🎺 Kaldet er klar om ${Math.ceil(callReady - game.time)} sekunder`);
+        } else {
+          callReady = game.time + 60;
+          sound.call();
+          game.wildlife.lure(30);
+          game.message('🎺 Hjortene kommer! Pas på vildsvinene...');
+        }
+      }
 
       for (const [i, d] of decoys.entries()) d.position.y = game.waterLevel + 0.15 + Math.sin(game.time * 1.5 + i) * 0.04;
 

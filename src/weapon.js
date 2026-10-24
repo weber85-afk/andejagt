@@ -57,6 +57,28 @@ function makeRod() {
   return rod;
 }
 
+function makeBow() {
+  const bow = new THREE.Group();
+  const wood = 0x8b5a2b;
+  for (const [y, rx] of [[0.35, -0.35], [0, 0], [-0.35, 0.35]]) {
+    const part = box(0.05, 0.4, 0.05, wood, 0, y, -0.55 - Math.abs(y) * 0.25);
+    part.rotation.x = rx;
+    bow.add(part);
+  }
+  bow.add(box(0.01, 0.95, 0.01, 0xeeeeee, 0, 0, -0.38));    // streng
+  bow.add(box(0.03, 0.03, 0.75, 0x6b4423, 0, 0, -0.65));    // pil
+  bow.add(box(0.06, 0.06, 0.08, 0xaaaaaa, 0, 0, -1.04));
+  return bow;
+}
+
+function makeDetector() {
+  const d = new THREE.Group();
+  const pole = box(0.04, 0.04, 1.3, 0x555555, 0, -0.2, -0.6);
+  pole.rotation.x = -0.5;
+  d.add(pole, box(0.4, 0.04, 0.3, 0x2a2a2a, 0, -0.52, -1.18), box(0.12, 0.1, 0.16, 0xf2c22b, 0, 0.0, -0.1));
+  return d;
+}
+
 function addFlash(gun, z) {
   const flash = new THREE.Mesh(
     new THREE.BoxGeometry(0.22, 0.22, 0.22),
@@ -82,7 +104,13 @@ export function createWeapon(game) {
     shotgun: { name: 'Haglgevær', hand: addFlash(makeShotgun(), -0.98), figure: addFlash(makeShotgun(), -0.98), loaded: cfg.shotgun.magazine },
     bigRifle: { name: 'Riffel', hand: addFlash(makeBigRifle(), -1.35), figure: addFlash(makeBigRifle(), -1.35), loaded: cfg.bigRifle.magazine },
     rod: { name: 'Fiskestang', hand: addFlash(makeRod(), -1.5), figure: addFlash(makeRod(), -1.5), loaded: 0 },
+    bow: { name: 'Bue', hand: addFlash(makeBow(), -1.1), figure: addFlash(makeBow(), -1.1), loaded: 0 },
+    detector: { name: 'Metaldetektor', hand: addFlash(makeDetector(), -1.2), figure: addFlash(makeDetector(), -1.2), loaded: 0 },
   };
+  // Våben der ikke bruger patroner
+  const TOOLS = ['rod', 'detector'];
+  const SHOP_ID = { rod: 'fishingRod', detector: 'metalDetector' };
+  const arrows = [];   // pile der ligger på jorden og kan samles op
   const handBase = new THREE.Vector3(0.3, -0.3, -0.5);
   for (const gun of Object.values(guns)) {
     gun.hand.position.copy(handBase);
@@ -111,6 +139,7 @@ export function createWeapon(game) {
   // Hvad våbnet kan lige nu (geværet bliver bedre, når det opgraderes)
   function stats(id = current) {
     if (id === 'shotgun') return cfg.shotgun;
+    if (id === 'bow') return cfg.bow;
     if (id === 'bigRifle') return cfg.bigRifle;
     const level = shop.level('betterGun');
     return level ? { ...cfg.rifle, ...cfg.rifle.upgrades[level - 1] } : cfg.rifle;
@@ -143,6 +172,43 @@ export function createWeapon(game) {
     } else {
       game.message('Ingen patroner! Køb flere i butikken 🛒');
     }
+  }
+
+  // Skyd med buen: lydløst, og pilene kan samles op igen
+  function shootBow() {
+    if ((state.arrows ?? 0) <= 0) {
+      sound.empty();
+      game.message('🏹 Ingen pile! Saml dem op igen eller køb nye');
+      return;
+    }
+    state.arrows--;
+    cooldown = cfg.bow.cooldown;
+    kick = 0.6;
+    sound.flutter();
+    raycaster.setFromCamera(center, camera);
+    const ray = raycaster.ray;
+    const found = [];
+    for (const provider of game.targets) {
+      for (const hit of provider.findHits(ray, cfg.bow.range)) found.push({ ...hit, provider });
+    }
+    found.sort((a, b) => a.along - b.along);
+    if (found.length) {
+      found[0].provider.hit(found[0].target, 'bow');
+      state.arrows++;   // pilen sidder i dyret og kommer med, når man tager det
+    } else {
+      // Pilen lander på jorden et sted foran én
+      const p = new THREE.Vector3();
+      for (let t = 2; t < cfg.bow.range; t += 1) {
+        ray.at(t, p);
+        if (p.y <= game.groundHeight(p.x, p.z) + 0.1) break;
+      }
+      const arrow = box(0.05, 0.05, 0.8, 0x6b4423, p.x, game.groundHeight(p.x, p.z) + 0.15, p.z);
+      arrow.rotation.y = player.yaw;
+      arrow.rotation.x = -0.4;
+      game.scene.add(arrow);
+      arrows.push(arrow);
+    }
+    game.emit('shot', { hit: found.length > 0, loud: false });
   }
 
   function shoot() {
@@ -178,17 +244,17 @@ export function createWeapon(game) {
       const point = ray.at(t, new THREE.Vector3());
       if (t < s.range && game.isInLake(point.x, point.z)) effects.splash(point);
     }
-    game.emit('shot', { hit: hits.length > 0 });
+    game.emit('shot', { hit: hits.length > 0, loud: true });
     if (gun.loaded === 0 && reserve > 0) startReload();
   }
 
   function select(id) {
     if (id === current) return;
-    const item = id === 'rod' ? 'fishingRod' : id;
+    const item = SHOP_ID[id] ?? id;
     if (id !== 'rifle' && !shop.has(item)) return;
     current = id;
     reloading = 0;
-    game.message({ rifle: '🔫 Gevær', shotgun: '💥 Haglgevær', bigRifle: '🐻 Riffel', rod: '🎣 Fiskestang' }[id]);
+    game.message({ rifle: '🔫 Gevær', shotgun: '💥 Haglgevær', bigRifle: '🐻 Riffel', rod: '🎣 Fiskestang', bow: '🏹 Bue', detector: '🔍 Metaldetektor' }[id]);
   }
 
   shop.addItem({
@@ -250,6 +316,37 @@ export function createWeapon(game) {
   });
 
   shop.addItem({
+    id: 'bow',
+    category: 'udstyr',
+    emoji: '🏹',
+    name: 'Bue og pil',
+    basePrice: config.prices.bow,
+    levels: [{ text: 'Lydløs, så dyrene ikke bliver bange. Pilene kan samles op. Tryk 5' }],
+    onBuy(level, { loading }) {
+      if (!loading) {
+        state.arrows = (state.arrows ?? 0) + cfg.bow.startArrows;
+        game.message('🏹 Tryk 5 for buen');
+        select('bow');
+      }
+    },
+  });
+
+  shop.addItem({
+    id: 'arrows',
+    category: 'udstyr',
+    emoji: '➶',
+    name: 'Pile',
+    consumable: true,
+    price: config.prices.arrows,
+    requires: () => (shop.has('bow') ? null : 'Kræver buen'),
+    text: '10 pile mere',
+    current: () => `Du har ${state.arrows ?? 0} pile`,
+    onBuy() {
+      state.arrows = (state.arrows ?? 0) + 10;
+    },
+  });
+
+  shop.addItem({
     id: 'binoculars',
     category: 'udstyr',
     emoji: '👀',
@@ -280,7 +377,7 @@ export function createWeapon(game) {
       reserve = data.reserve ?? reserve;
       for (const id of Object.keys(guns)) guns[id].loaded = data[id] ?? guns[id].loaded;
       if (data.current && data.current !== 'rifle' && shop.has(data.current)) current = data.current;
-      if (data.current === 'rod' && shop.has('fishingRod')) current = 'rod';
+      if (SHOP_ID[data.current] && shop.has(SHOP_ID[data.current])) current = data.current;
     },
   });
 
@@ -288,6 +385,9 @@ export function createWeapon(game) {
     // Hvor meget der er zoomet ind (1 = ingen zoom). Bruges til at gøre musen langsommere.
     get zoom() { return zoom; },
     get current() { return current; },
+    addAmmo(n) {
+      reserve += n;
+    },
     // Spidsen af fiskestangen (i verden), så fiskelinen kan tegnes derfra
     rodTip(target) {
       const rod = player.mode === 'first' ? guns.rod.hand : guns.rod.figure;
@@ -313,7 +413,20 @@ export function createWeapon(game) {
       if (input.wasPressed('Digit2')) select('shotgun');
       if (input.wasPressed('Digit3')) select('bigRifle');
       if (input.wasPressed('Digit4')) select('rod');
-      if (input.wasPressed('KeyR') && current !== 'rod') startReload();
+      if (input.wasPressed('Digit5')) select('bow');
+      if (input.wasPressed('Digit6')) select('detector');
+
+      // Saml pile op
+      for (let i = arrows.length - 1; i >= 0; i--) {
+        const a = arrows[i];
+        if (Math.hypot(a.position.x - player.position.x, a.position.z - player.position.z) < 1.5) {
+          game.scene.remove(a);
+          arrows.splice(i, 1);
+          state.arrows = (state.arrows ?? 0) + 1;
+          sound.pickup();
+        }
+      }
+      if (input.wasPressed('KeyR') && !TOOLS.includes(current) && current !== 'bow') startReload();
 
       if (shop.has('binoculars') && input.wasPressed('KeyB')) {
         binoOn = !binoOn;
@@ -321,8 +434,10 @@ export function createWeapon(game) {
       }
 
       cooldown -= dt;
-      if (current === 'rod' || binoOn) {
-        // Fiskestangen skyder ikke (se fishing.js)
+      if (TOOLS.includes(current) || binoOn) {
+        // Fiskestangen og metaldetektoren skyder ikke (se fishing.js og treasure.js)
+      } else if (current === 'bow') {
+        if (input.clicked && cooldown <= 0) shootBow();
       } else if (reloading > 0) {
         reloading -= dt;
         if (reloading <= 0) finishReload();
@@ -375,8 +490,9 @@ export function createWeapon(game) {
 
       const icon = { rifle: '🔫', shotgun: '💥', bigRifle: '🐻' }[current];
       const reloadText = reloading > 0 ? '<small>lader om...</small><br>' : '';
-      const html = current === 'rod'
-        ? '🎣 Fiskestang'
+      const html = current === 'rod' ? '🎣 Fiskestang'
+        : current === 'detector' ? '🔍 Metaldetektor'
+        : current === 'bow' ? `🏹 ${state.arrows ?? 0} pile`
         : `${reloadText}${icon} ${gun.loaded}/${stats().magazine} <small>· 🎒 ${reserve}</small>`;
       if (html !== lastAmmo) ammoEl.innerHTML = lastAmmo = html;
     },

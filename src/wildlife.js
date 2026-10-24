@@ -266,6 +266,24 @@ export function createWildlife(game) {
     take: (a) => remove(a),
   });
 
+  // Skud (ikke buen) skræmmer dyrene i nærheden
+  game.on('shot', ({ loud }) => {
+    if (!loud) return;
+    const p = game.player.position;
+    for (const a of animals) {
+      if (a.area !== game.area || a.state !== 'walk') continue;
+      if (Math.hypot(a.mesh.position.x - p.x, a.mesh.position.z - p.z) > 45) continue;
+      if (a.type === 'pheasant') {
+        a.state = 'fly';
+        a.timer = 4;
+        a.velocity.set(Math.sin(a.heading) * 8, 5, Math.cos(a.heading) * 8);
+      } else if (a.type !== 'boar') {
+        flee(a);
+      }
+    }
+  });
+  let lureUntil = 0;
+
   // Fyld områderne med dyr
   for (const [areaId, counts] of Object.entries(POPULATION)) {
     const area = game.areas[areaId];
@@ -315,8 +333,14 @@ export function createWildlife(game) {
   return {
     list: animals,
 
+    // Hjortekaldet: hjorte og vildsvin går hen mod spilleren
+    lure(seconds) {
+      lureUntil = game.time + seconds;
+    },
+
     update(dt) {
       const here = game.area;
+      const stealth = game.stealth ? 0.5 : 1;   // kamuflage: dyrene opdager én senere
       const player = game.player.position;
       const hidden = game.tower?.isOnTop;          // på jagttårnet bliver dyrene ikke bange
       const safe = hidden || game.car?.inCar;
@@ -386,7 +410,7 @@ export function createWildlife(game) {
         }
 
         if (a.type === 'pheasant') {
-          if (a.state === 'walk' && distance < 12 && !hidden) {
+          if (a.state === 'walk' && distance < 12 * stealth && !hidden) {
             // Fasanen letter!
             a.state = 'fly';
             a.timer = 4 + Math.random() * 3;
@@ -418,7 +442,7 @@ export function createWildlife(game) {
         const awayFromPlayer = Math.atan2(p.x - player.x, p.z - player.z);
 
         if (a.type === 'boar') {
-          if (a.state === 'walk' && distance < 14 && !safe && game.time > (a.calmUntil ?? 0)) {
+          if (a.state === 'walk' && distance < 14 * stealth && !safe && game.time > (a.calmUntil ?? 0)) {
             a.state = 'charge';
             a.timer = 8;
             sound.roar(0.3);
@@ -438,7 +462,8 @@ export function createWildlife(game) {
           }
         } else if (a.type !== 'pheasant') {
           const scare = { hare: 15, deer: 25, ibex: 20 }[a.type];
-          if (distance < scare && !hidden && a.state === 'walk') flee(a);
+          const lured = a.type === 'deer' && game.time < lureUntil;
+          if (distance < scare * stealth * (lured ? 0.4 : 1) && !hidden && a.state === 'walk') flee(a);
           if (a.state === 'flee') {
             a.timer -= dt;
             spd = { hare: 9, deer: 10, ibex: 7 }[a.type];
@@ -449,7 +474,13 @@ export function createWildlife(game) {
         if (a.type === 'hare') {
           a.body.position.y = Math.abs(Math.sin(a.phase * (spd > 2 ? 12 : 5))) * (spd > 2 ? 0.35 : 0.12);
         }
-        if (a.state === 'walk' && Math.random() < dt * 0.4) a.heading += (Math.random() - 0.5) * 2;
+        if (game.time < lureUntil && (a.type === 'deer' || a.type === 'boar') && a.state === 'walk') {
+          // Lokket af hjortekaldet
+          a.heading = Math.atan2(player.x - p.x, player.z - p.z);
+          spd = distance > 12 ? 2.5 : 0;
+        } else if (a.state === 'walk' && Math.random() < dt * 0.4) {
+          a.heading += (Math.random() - 0.5) * 2;
+        }
         walk(a, spd, dt);
       }
     },

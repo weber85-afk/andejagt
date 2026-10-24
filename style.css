@@ -201,6 +201,14 @@ html, body {
 }
 #binoculars.on { display: block; }
 
+#nightvision {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: radial-gradient(circle, transparent 55%, rgba(0, 20, 0, 0.85) 100%);
+}
+#nightvision.on { display: block; }
+
 #compass {
   position: absolute;
   top: 12px;
