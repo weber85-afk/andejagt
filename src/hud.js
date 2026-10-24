@@ -43,7 +43,9 @@ export function createHud(game) {
         .map(([type, n]) => `${game.config.foods[type].emoji} ${n}`)
         .join(' &nbsp;');
       const season = game.seasons ? ` · ${game.seasons.name}` : '';
-      let html = `${dn.isNight ? '🌙 Nat' : '☀️ Dag'} ${dn.day}${season} · ${game.area.name}<br>🎒 ${bag || 'Tom'}<br>🍗 Stegte: ${s.cooked}${s.dishes ? ` · 🍲 Retter: ${s.dishes}` : ''}<br>⭐ Point: ${s.points}`;
+      const xp = game.xp;
+      const level = xp ? `<br>🎖️ Niv. ${xp.level} ${xp.title} <span class="xpbar"><span style="width:${Math.round(xp.progress * 100)}%"></span></span>` : '';
+      let html = `${dn.isNight ? '🌙 Nat' : '☀️ Dag'} ${dn.day}${season} · ${game.area.name}${level}<br>🎒 ${bag || 'Tom'}<br>🍗 Stegte: ${s.cooked}${s.dishes ? ` · 🍲 Retter: ${s.dishes}` : ''}<br>⭐ Point: ${s.points}`;
       if (s.burnt > 0) html += `<br>⚫ Brændte: ${s.burnt}`;
       if (html !== lastStats) {
         stats.innerHTML = html;

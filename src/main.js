@@ -47,6 +47,8 @@ import { createPot } from './pot.js';
 import { createForage } from './forage.js';
 import { createSea } from './sea.js';
 import { createSeasons } from './seasons.js';
+import { createXp } from './xp.js';
+import { createEconomy } from './economy.js';
 import { createStats } from './stats.js';
 
 const game = createGame(config);
@@ -105,6 +107,8 @@ game.add('effects', createEffects(game));
 game.add('life', createLife(game));
 game.add('hud', createHud(game));
 game.add('shop', createShop(game));
+game.add('xp', createXp(game));
+game.add('economy', createEconomy(game));
 game.add('player', createPlayer(game));
 game.add('ducks', createDucks(game));
 game.add('tracks', createTracks(game));
@@ -143,6 +147,7 @@ game.systems.push(game.systems.splice(game.systems.indexOf(game.hud), 1)[0]);
 // Hent det gemte spil (hvis der er et)
 game.save.load();
 game.tips.skipIfExperienced();
+game.xp.seedFromStats(game.saveables.stats.save().s);
 game.settings.apply();
 
 game.screens = createScreens(game, renderer.domElement);

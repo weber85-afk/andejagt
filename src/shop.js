@@ -74,6 +74,13 @@ export function createShop(game) {
   }
 
   const slot = (item) => item.group || item.id;
+
+  // Hvorfor en vare ikke kan købes endnu (eller null). Nogle ting kræver et vist jægerniveau.
+  const blockedText = (item) => item.requires?.()
+    ?? (item.minLevel && (game.xp?.level ?? 1) < item.minLevel ? `Kræver jægerniveau ${item.minLevel}` : null);
+
+  // Faner med deres eget indhold (fx marked og sparegris)
+  const customTabs = {};
   const isEquipped = (item) => equipped[slot(item)] === item.id;
 
   function equip(item, on, loading = false) {
@@ -127,12 +134,16 @@ export function createShop(game) {
     }
 
     list.innerHTML = '';
+    if (customTabs[tab]) {
+      customTabs[tab](list, render);
+      return;
+    }
     // Det man kan købe står øverst, det låste i midten og det købte nederst
     const order = (item) => {
       const leveled = !item.consumable && !item.cosmetic;
       if (leveled && !item.levels[levels[item.id] || 0]) return 2;
       if (item.cosmetic && owned.has(item.id)) return 2;
-      return item.requires?.() ? 1 : 0;
+      return blockedText(item) ? 1 : 0;
     };
     const shown = items.filter((i) => i.category === tab).sort((a, b) => order(a) - order(b));
     for (const item of shown) {
@@ -140,7 +151,7 @@ export function createShop(game) {
       const leveled = !item.consumable && !item.cosmetic;
       const next = leveled ? item.levels[level] : null;
       const price = priceOf(item, level);
-      const blocked = item.requires?.();
+      const blocked = blockedText(item);
       const dots = leveled && item.levels.length > 1
         ? '●'.repeat(level) + '○'.repeat(item.levels.length - level)
         : '';
@@ -183,7 +194,7 @@ export function createShop(game) {
   function buy(item) {
     const level = levels[item.id] || 0;
     const price = priceOf(item, level);
-    if (state.points < price || item.requires?.()) return;
+    if (state.points < price || blockedText(item)) return;
     if (!item.consumable && !item.cosmetic && !item.levels[level]) return;
     state.points -= price;
     if (item.cosmetic) {
@@ -230,6 +241,17 @@ export function createShop(game) {
     //  requires() kan returnere en tekst, hvis varen ikke kan købes endnu (fx 'Kræver shelteret')
     addItem(item) {
       items.push(item);
+    },
+
+    // En fane med sit eget indhold: render(container, rerender)
+    addTab({ id, name, render: fill }) {
+      CATEGORIES.push({ id, name });
+      customTabs[id] = fill;
+    },
+
+    // Opdater butiksvinduet (fx efter man har solgt noget)
+    refresh() {
+      render();
     },
 
     level: (id) => levels[id] || 0,

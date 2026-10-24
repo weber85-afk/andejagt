@@ -206,6 +206,8 @@ export const config = {
     rainChance: 0.4,       // Chancen for regn hver dag (0 = aldrig, 1 = hver dag)
     snowChance: 0.7,       // Chancen for sne hver dag om vinteren
     rainLength: 40,        // Sekunder det regner
+    stormChance: 0.35,     // Chancen for at regnen bliver til tordenvejr
+    rainbowSeconds: 45,    // Så længe regnbuen er der efter regn
   },
 
   // --- Butikken ---
@@ -386,6 +388,16 @@ export const config = {
   points: {
     spiceBonus: 10,        // Ekstra point for stegt mad med krydderier
     burnt: 1,              // Point for noget der er brændt på
+  },
+
+  // --- Marked og sparegris ---
+  economy: {
+    rawShare: 0.5,         // Råt vildt sælges for denne del af stegepointene
+    ingredientPrice: 3,    // Pris for bær, svampe, æg osv.
+    minFactor: 0.6,        // Priserne svinger mellem 60% og 160% hver dag
+    maxFactor: 1.6,
+    interest: 0.05,        // Renter i sparegrisen hver morgen (5%)
+    maxInterest: 150,
   },
 
   // --- Gem ---

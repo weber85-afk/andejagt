@@ -54,6 +54,17 @@ html, body {
   border-radius: 12px;
 }
 
+.xpbar {
+  display: inline-block;
+  width: 60px;
+  height: 8px;
+  border: 2px solid #fff;
+  border-radius: 5px;
+  vertical-align: middle;
+  overflow: hidden;
+}
+.xpbar span { display: block; height: 100%; background: #ffe14d; }
+
 #prompt {
   position: absolute;
   bottom: 18%;

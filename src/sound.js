@@ -265,6 +265,11 @@ export function createSound() {
       noise({ seconds: 0.4, volume: 0.3, type: 'highpass', freq: 1500 });
     }),
 
+    thunder: play((volume = 0.8) => {
+      noise({ seconds: 2.8, volume, type: 'lowpass', freq: 160, attack: 0.15 });
+      noise({ seconds: 0.6, volume: volume * 0.6, type: 'lowpass', freq: 600, attack: 0.02 });
+    }),
+
     puff: play(() => {
       noise({ seconds: 0.6, volume: 0.5, type: 'lowpass', freq: 500 });
       tone({ type: 'sawtooth', from: 200, to: 80, seconds: 0.5, volume: 0.15 });
