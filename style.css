@@ -335,7 +335,7 @@ html, body {
   position: fixed;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: flex-start;   /* toppen må aldrig forsvinde, når menuen er højere end skærmen */
   justify-content: center;
   background: rgba(20, 60, 30, 0.55);
   overflow-y: auto;
@@ -344,6 +344,7 @@ html, body {
 .screen.hidden { display: none; }
 
 .panel {
+  margin: auto;   /* midt på skærmen, når der er plads */
   background: #fff8e8;
   color: #3a2a10;
   border: 6px solid #6b4423;
@@ -415,7 +416,22 @@ kbd {
   transform: none;
 }
 
-.shop-panel { width: 680px; }
+.shop-panel {
+  width: 680px;
+  max-height: calc(100vh - 32px);
+  display: flex;
+  flex-direction: column;
+}
+/* Kun varerne ruller. Overskrift, point og faner bliver stående */
+.shop-panel #shop-items,
+.shop-panel #recipe-items {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 2px 6px 2px 2px;
+}
+.shop-panel h1 { font-size: 40px; }
+.shop-panel > button { align-self: center; }
 .travel-buttons { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
 #shop-sell {
   margin: -6px 0 14px;
@@ -432,8 +448,7 @@ kbd {
   box-shadow: 0 3px 0 #b89c6c;
 }
 .panel button.tab.active { background: #e8692b; color: #fff; box-shadow: 0 3px 0 #a3421a; }
-#shop-items { min-height: 300px; }
-#shop-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+#shop-items, #recipe-items { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
 .item {
   display: flex;
   align-items: center;
