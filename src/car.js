@@ -239,6 +239,7 @@ export function createCar(game) {
     { area: forestArea, emoji: '🌲', text: 'Storskoven' },
     { area: game.areas.mountain, emoji: '⛰️', text: 'Fjeldet', needs: () => (shop.has('fourWheel') ? null : 'Kræver firehjulstræk') },
     { area: game.areas.sea, emoji: '🌊', text: 'Havet' },
+    { area: game.areas.moor, emoji: '🌾', text: 'Mosen' },
   ];
 
   function checkTravel() {

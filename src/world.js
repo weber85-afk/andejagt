@@ -381,6 +381,21 @@ export function createWorld(game) {
     flowers: config.sea.flowers,
   });
 
+  buildArea(game.areas.moor, {
+    grass: [0x7a8a4a, 0x6a7a3a],
+    highland: 0x8a9a5a,
+    beach: 1.5,
+    tufts: [0x9aaa5a, 0x8a9a4a, 0xaab86a],
+    trees: config.moor.trees,
+    treeSpacing: 4,
+    treeMix: { birch: 0.7, spruce: 0.3 },
+    edgeTree: 'birch',
+    bushes: 40,
+    rocks: 10,
+    grassTufts: config.moor.grassTufts,
+    flowers: config.moor.flowers,
+  });
+
   // --- Skyer (følger med til det område man er i) ---
   const cloudRandom = seededRandom(7);
   for (let i = 0; i < 16; i++) {

@@ -216,7 +216,7 @@ export function createPlayer(game) {
         const oldZ = position.z;
         position.add(move);
         game.pushOut(position, 0.35);
-        if (game.isDeepWater(position.x, position.z)) {
+        if (game.isDeepWater(position.x, position.z) || game.moor?.blocks(position.x, position.z)) {
           // Havet er for dybt til at gå ud i
           position.x = oldX;
           position.z = oldZ;

@@ -125,7 +125,7 @@ export function createGear(game) {
         torchOn = !torchOn;
         game.message(torchOn ? '🔦 Lygten er tændt' : '🔦 Lygten er slukket');
       }
-      const dark = 1 - game.dayNight.light;
+      const dark = game.inCave ? 1 : 1 - game.dayNight.light;
       torch.intensity = shop.has('flashlight') && torchOn ? 14 * dark : 0;
       if (torch.intensity > 0) {
         const { player } = game;

@@ -254,6 +254,8 @@ export const config = {
     parking: { x: 60, z: 30 },
     road: [{ x: 60, z: 30 }, { x: 80, z: 36 }, { x: 106, z: 30 }],
     fourWheelPrice: 600,
+    cave: { x: 45, z: -15 },       // Grotten (i forhold til midten)
+    caveTreasure: 500,
   },
 
   // --- Havet ---
@@ -271,6 +273,26 @@ export const config = {
     cutterPrice: 400,      // Fiskekutteren man kan sejle i
     cutterSpeed: 9,
     maxFishWeight: 12,     // Fisk i havet kan blive meget større
+    lighthouse: { x: -60, z: -4 },   // Fyrtårnet (i forhold til midten)
+  },
+
+  // --- Mosen ---
+  moor: {
+    center: { x: 0, z: 450 },
+    size: 200,
+    hills: 0.5,
+    trees: 70,
+    grassTufts: 3500,
+    flowers: 200,
+    parking: { x: -30, z: -40 },
+    road: [{ x: -30, z: -40 }, { x: -25, z: -70 }, { x: -30, z: -106 }],
+    // Små søer i mosen: { x, z, r } i forhold til midten (man skal have gummistøvler for at gå i dem)
+    ponds: [
+      { x: 0, z: 0, r: 9 }, { x: 30, z: 20, r: 6 }, { x: -35, z: 15, r: 7 }, { x: 40, z: -30, r: 5 },
+      { x: -10, z: 45, r: 8 }, { x: 55, z: 50, r: 6 }, { x: -55, z: -25, r: 5 }, { x: 20, z: -55, r: 6 }, { x: -60, z: 55, r: 7 },
+    ],
+    frogs: 14,
+    herons: 4,
   },
 
   // --- Lejren ---
@@ -375,6 +397,8 @@ export const config = {
     hammock: 50,
     lights: 60,
     owl: 300,
+    boots: 80,
+    mosquitoSpray: 30,
     falcon: 400,
     puppy: 300,
   },
@@ -409,6 +433,7 @@ export const config = {
     hare: { name: 'hare', plural: 'harer', emoji: '🐇', shotPoints: 10, cookedPoints: 30 },
     fish: { name: 'fisk', plural: 'fisk', emoji: '🐟', shotPoints: 5, cookedPoints: 15 },
     bear: { name: 'bjørnekød', plural: 'bjørnekød', emoji: '🍖', shotPoints: 100, cookedPoints: 150 },
+    eel: { name: 'ål', plural: 'ål', emoji: '🐍', shotPoints: 8, cookedPoints: 40 },
     deer: { name: 'hjortekød', plural: 'hjortekød', emoji: '🦌', shotPoints: 40, cookedPoints: 90 },
     boar: { name: 'vildsvin', plural: 'vildsvin', emoji: '🐗', shotPoints: 25, cookedPoints: 60 },
     ibex: { name: 'stenbuk', plural: 'stenbukke', emoji: '🐐', shotPoints: 20, cookedPoints: 50 },

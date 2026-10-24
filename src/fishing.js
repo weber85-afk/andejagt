@@ -91,12 +91,13 @@ export function createFishing(game) {
     const level = shop.level('rodUpgrade');
     const bonus = (level ? cfg.rodUpgrades[level - 1] : 1) * (usedBait ? 1.3 : 1);
     const weight = Math.round((0.4 + Math.random() ** 2 * max * bonus) * 10) / 10;
-    game.addToBag('fish');
+    const catchType = game.area.id === 'moor' ? 'eel' : 'fish';   // i mosen fanger man ål
+    game.addToBag(catchType);
     const record = weight > (state.trophies.biggestFish || 0);
     if (record) state.trophies.biggestFish = weight;
     sound.pickup();
     effects.splash(bobber.position);
-    game.message(`🐟 Du fangede en fisk på ${String(weight).replace('.', ',')} kg!${record ? ' Ny rekord! 🏆' : ''}`);
+    game.message(`${catchType === 'eel' ? '🐍 Du fangede en ål' : '🐟 Du fangede en fisk'} på ${String(weight).replace('.', ',')} kg!${record ? ' Ny rekord! 🏆' : ''}`);
     game.emit('animalHit', { type: 'fish' });
     game.emit('fishCaught', { weight });
     reelIn();

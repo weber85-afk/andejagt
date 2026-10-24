@@ -152,6 +152,15 @@ export function createDayNight(game) {
       world.sun.color.copy(MOON_COLOR).lerp(SUN_COLOR, light).lerp(DUSK_SUN, duskiness * 0.6);
       world.hemi.intensity = 0.3 + 0.8 * light;
 
+      // Inde i grotten er der mørkt
+      if (game.inCave) {
+        world.sun.intensity *= 0.05;
+        world.hemi.intensity *= 0.08;
+        scene.fog.color.setRGB(0.02, 0.02, 0.03);
+        scene.fog.near = 2;
+        scene.fog.far = 30;
+      }
+
       const starsVisible = Math.max(0, 1 - light * 1.6);
       starMat.opacity = starsVisible;
       moonMat.opacity = starsVisible;

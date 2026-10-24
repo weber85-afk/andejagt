@@ -97,7 +97,7 @@ export function createAreas(game) {
     parking: atM(m.parking),
     road: m.road.map(atM),
     water: [],
-    flat: [{ ...atM(m.parking), r: 9 }],
+    flat: [{ ...atM(m.parking), r: 9 }, { ...atM(m.cave), r: 14 }],
   };
 
   const sc = config.sea.center;
@@ -114,13 +114,28 @@ export function createAreas(game) {
     road: sea.road.map(atS),
     water: [{ type: 'sea', shore: sc.z + sea.shore }],
     pier: { minX: sc.x + sea.pier.x - sea.pier.width / 2, maxX: sc.x + sea.pier.x + sea.pier.width / 2, minZ: sc.z + sea.pier.from - 8, maxZ: sc.z + sea.pier.to },
-    flat: [{ ...atS(sea.parking), r: 9 }, { x: sc.x + sea.pier.x, z: sc.z + sea.pier.from - 6, r: 5 }],
+    flat: [{ ...atS(sea.parking), r: 9 }, { x: sc.x + sea.pier.x, z: sc.z + sea.pier.from - 6, r: 5 }, { ...atS(sea.lighthouse), r: 5 }],
   };
 
-  const areas = { home, forest, mountain, sea: seaArea };
+  const mo = config.moor;
+  const atMo = (p) => ({ x: p.x + mo.center.x, z: p.z + mo.center.z });
+  const moor = {
+    id: 'moor',
+    name: 'Mosen',
+    center: mo.center,
+    size: mo.size,
+    hills: mo.hills,
+    seed: 8.3,
+    parking: atMo(mo.parking),
+    road: mo.road.map(atMo),
+    water: mo.ponds.map((p) => ({ type: 'lake', ...atMo(p), r: p.r, mud: true })),
+    flat: [{ ...atMo(mo.parking), r: 9 }],
+  };
+
+  const areas = { home, forest, mountain, sea: seaArea, moor };
 
   function areaAt(x, z) {
-    for (const a of [forest, mountain, seaArea]) if (Math.hypot(x - a.center.x, z - a.center.z) < a.size) return a;
+    for (const a of [forest, mountain, seaArea, moor]) if (Math.hypot(x - a.center.x, z - a.center.z) < a.size) return a;
     return home;
   }
 
