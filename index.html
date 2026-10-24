@@ -4,12 +4,75 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Andejagt</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=43bcb3f1">
   <script type="importmap">
     {
       "imports": {
         "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+        "./src/ambience.js": "./src/ambience.js?v=2d8ff86b",
+        "./src/areas.js": "./src/areas.js?v=16116fb2",
+        "./src/bear.js": "./src/bear.js?v=aa23a754",
+        "./src/boats.js": "./src/boats.js?v=fe133fec",
+        "./src/camp.js": "./src/camp.js?v=f07774cf",
+        "./src/campfire.js": "./src/campfire.js?v=1d344acf",
+        "./src/car.js": "./src/car.js?v=417616d3",
+        "./src/catalog.js": "./src/catalog.js?v=7d7072cf",
+        "./src/cave.js": "./src/cave.js?v=c97bbc68",
+        "./src/cold.js": "./src/cold.js?v=af552ffb",
+        "./src/config.js": "./src/config.js?v=fb700eaa",
+        "./src/daynight.js": "./src/daynight.js?v=47d91a95",
+        "./src/decor.js": "./src/decor.js?v=4789c560",
+        "./src/dog.js": "./src/dog.js?v=26efa376",
+        "./src/ducks.js": "./src/ducks.js?v=151b1ec5",
+        "./src/economy.js": "./src/economy.js?v=127a3dbc",
+        "./src/effects.js": "./src/effects.js?v=171a6122",
+        "./src/farm.js": "./src/farm.js?v=4c69d17d",
+        "./src/fishing.js": "./src/fishing.js?v=4b9814b5",
+        "./src/forage.js": "./src/forage.js?v=0d40084b",
+        "./src/fox.js": "./src/fox.js?v=bd71f1bd",
+        "./src/game.js": "./src/game.js?v=fb899028",
+        "./src/gear.js": "./src/gear.js?v=13cc2ff2",
+        "./src/hud.js": "./src/hud.js?v=756673d7",
+        "./src/hunger.js": "./src/hunger.js?v=8965fd60",
+        "./src/input.js": "./src/input.js?v=6af1c03d",
+        "./src/life.js": "./src/life.js?v=ee4d39ab",
+        "./src/lighthouse.js": "./src/lighthouse.js?v=ae7cbdb0",
+        "./src/main.js": "./src/main.js?v=8110e7a3",
+        "./src/map.js": "./src/map.js?v=9da881b5",
+        "./src/models.js": "./src/models.js?v=27c30da6",
+        "./src/moor.js": "./src/moor.js?v=de0b24f8",
+        "./src/nightvision.js": "./src/nightvision.js?v=8e27cfe8",
+        "./src/pets.js": "./src/pets.js?v=52bf811e",
+        "./src/photo.js": "./src/photo.js?v=3ebfebee",
+        "./src/player.js": "./src/player.js?v=3f1da27b",
+        "./src/pot.js": "./src/pot.js?v=e1d3f244",
+        "./src/ranger.js": "./src/ranger.js?v=0fa2cbfc",
+        "./src/rides.js": "./src/rides.js?v=556cd97c",
+        "./src/save.js": "./src/save.js?v=bcd0ff3d",
+        "./src/score.js": "./src/score.js?v=d0ee0ca6",
+        "./src/screens.js": "./src/screens.js?v=944599e3",
+        "./src/sea.js": "./src/sea.js?v=a4ba4c7a",
+        "./src/seasons.js": "./src/seasons.js?v=1dc05c77",
+        "./src/settings.js": "./src/settings.js?v=43a81d44",
+        "./src/shelter.js": "./src/shelter.js?v=bd782cdb",
+        "./src/shop.js": "./src/shop.js?v=8e9aefaf",
+        "./src/smokehouse.js": "./src/smokehouse.js?v=35295cf5",
+        "./src/sound.js": "./src/sound.js?v=f768047e",
+        "./src/stats.js": "./src/stats.js?v=a99681cf",
+        "./src/textures.js": "./src/textures.js?v=e3b7f303",
+        "./src/tips.js": "./src/tips.js?v=e2811cfc",
+        "./src/tower.js": "./src/tower.js?v=6befbbab",
+        "./src/tracks.js": "./src/tracks.js?v=f0a5497c",
+        "./src/traps.js": "./src/traps.js?v=17d4ab01",
+        "./src/treasure.js": "./src/treasure.js?v=a9fe9427",
+        "./src/trophies.js": "./src/trophies.js?v=4197775d",
+        "./src/wardrobe.js": "./src/wardrobe.js?v=eeaf1727",
+        "./src/weapon.js": "./src/weapon.js?v=b701ce24",
+        "./src/weather.js": "./src/weather.js?v=8adf2e42",
+        "./src/wildlife.js": "./src/wildlife.js?v=016c6c34",
+        "./src/world.js": "./src/world.js?v=138aa391",
+        "./src/xp.js": "./src/xp.js?v=a548725b"
       }
     }
   </script>
@@ -94,6 +157,7 @@
     </div>
   </div>
 
-  <script type="module" src="src/main.js"></script>
+  <!-- Hentes gennem import-kortet øverst, så den nyeste udgave altid bruges -->
+  <script type="module">import './src/main.js';</script>
 </body>
 </html>

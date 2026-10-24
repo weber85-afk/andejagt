@@ -98,3 +98,20 @@ Skriv nye idéer her! Når en idé er lavet, flyttes den ned under **Færdigt**.
   - Vinter med sne, frossen sø og isfiskeri
   - Forår
 - [x] Flere spillere på samme computer
+- [x] Spillet ligger online, og man kan gemme/hente sit spil som fil
+- [x] Jægerniveau, marked med daglige priser, sparegris med renter
+- [x] Tordenvejr og regnbuer
+- [x] Udstyr:
+  - Metaldetektor og skattejagt (**6**)
+  - Bue og pil (**5**)
+  - Hjortekald (**C**)
+  - Kamuflagedragt
+  - Fælder (**T**)
+  - Natkikkert (**N**)
+  - Bedre fiskestang og agn
+- [x] Hønsehus, køkkenhave, bistade, andedam, akvarium, pejs, gynge, hængekøje og lyskæder
+- [x] Kulde og varm jakke, og nye opskrifter
+- [x] Hest, ATV og snescooter (**J**), kano og speedbåd
+- [x] Ugle, falk (**Y**) og hundehvalpen Bamse
+- [x] Kæmpebjørnen og den gyldne hjort
+- [x] Grotten på Fjeldet, Fyrtårnet ved Havet og **Mosen**

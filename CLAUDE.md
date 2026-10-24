@@ -34,6 +34,16 @@ python3 serve.py 8123
 
 Åbn derefter http://localhost:8123, eller dobbeltklik på `Start spillet.command`. `serve.py` sender `Cache-Control: no-store`, så browseren aldrig blander gamle og nye filer. Brug den i stedet for `python3 -m http.server`. `.claude/launch.json` har konfigurationen `andejagt` på port 8124, så den ikke kolliderer med familiens egen server på 8123. Bemærk at hver port har sit eget gemte spil.
 
+## Læg spillet online
+
+Kør altid dette før en commit, der skal online. Det giver hver fil et versionsnummer i import-kortet i `index.html`, så browseren henter den nye udgave:
+
+```bash
+python3 tools/version.py
+```
+
+`index.html` indlæser `main.js` via `import './src/main.js'`, så også startfilen går gennem import-kortet. Detaljer om hvor spillet ligger online står i `CLAUDE.local.md`.
+
 ## Test
 
 - `window.game` er tilgængelig i konsollen.
@@ -63,6 +73,7 @@ python3 serve.py 8123
   - `forest` (Storskoven)
   - `mountain` (Fjeldet, med et stort bjerg via `peak`)
   - `sea` (Havet, med vand af typen `sea` syd for kysten og en `pier`)
+  - `moor` (Mosen, med små søer, der er markeret `mud`)
 
   Alle ligger i samme scene, men langt fra hinanden, så tågen skjuler de andre områder. Den giver:
   - `game.groundHeight`: bakker, der er flade ved bygninger, vand og veje. Den regner med is om vinteren og molen.
@@ -88,6 +99,20 @@ python3 serve.py 8123
   - `pot`: gryden med opskrifter (`config.recipes`). Retterne ligger i `state.dishes`.
   - `forage`: bærbuske (lejren) og svampe (Storskoven)
   - `sea`: mole og fiskekutter
+  - `xp`: jægerniveau (`level`, `title`). Butiksvarer kan have `minLevel`.
+  - `economy`: fanen "Marked" i butikken med sparegris og salg af råt vildt (`shop.addTab`)
+  - `treasure`: skatte, der graves op med metaldetektoren (våben 6)
+  - `traps`: fælder (T)
+  - `nightVision`: natkikkert (N)
+  - `farm`: hønsehus, køkkenhave, bistade og andedam
+  - `decor`: gynge, hængekøje og lyskæder (pynt)
+  - `cold`: varme og kulde (`state.warmth`) og varm jakke
+  - `rides`: hest, ATV og snescooter. De kaldes med J, og bruger `showRider` på køretøjet.
+  - `boats`: kano og speedbåd
+  - `pets`: ugle, falk (Y) og hvalp
+  - `moor`: Mosen med frøer, hejrer og myg. `moor.blocks()` bruges, så man ikke kan gå i mudderet uden gummistøvler.
+  - `cave`: grotten på Fjeldet (`game.inCave` gør det mørkt)
+  - `lighthouse`: fyrtårnet ved Havet
   - `weather`: regnbyger. Kører efter `dayNight` og gør himlen grå. `isRaining`.
   - `life`: ildfluer og sommerfugle
   - `shop`: bod og butiksvindue
@@ -137,6 +162,7 @@ python3 serve.py 8123
   - `traveled` `{ to }`
   - `missionDone`
   - `dishMade`, `ate`, `petted` og `shopOpened`
+  - `levelUp`, `treasureFound` og `frogCaught`
   - `season` `{ id }`
   - `cameraMode`, `message`, `bought`, `sold`, `nightfall`, `morning`, `rainStart` og `rainStop`
 
